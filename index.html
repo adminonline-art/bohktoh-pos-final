@@ -713,7 +713,10 @@ function startPolling(){
       }
 
       // ── Sync products ──
-      // sync เมื่อ: cart ว่าง หรือ force flag ถูกเซ็ต
+      // หยุด sync ถ้า modal checkout เปิดอยู่
+      const moOpen = !document.getElementById('mo-checkout').classList.contains('hidden');
+      if(moOpen) return; // รอให้ modal ปิดก่อน
+
       const activePage = document.querySelector('.page.active');
       const onPOS = activePage && activePage.id==='page-pos';
       const cartEmpty = !cart || cart.length === 0;
@@ -1353,7 +1356,7 @@ function genOrderId(){
 
 function confirmCheckout(){
   // ป้องกัน ontouchend + onclick เรียกซ้ำกัน
-  if(window._co) return; window._co=true; setTimeout(()=>{window._co=false;},1000);
+  if(window._co) return; window._co=true; setTimeout(()=>{window._co=false;},300);
 
   const {sub,disc,total}=calcTotals();
   const isGift=payMode==='gift';
